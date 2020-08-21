@@ -5,6 +5,14 @@ from db_config import mysql
 from flask import flash, render_template, request, redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 
+@app.route('/')
+def home():
+  return render_template('home.html')
+
+@app.route('/about')
+def about():
+  return render_template('about.html')
+
 @app.route('/new_user')
 def add_user_view():
   return render_template('add.html')
@@ -38,7 +46,7 @@ def add_user():
     print(e)
     return redirect('/')
 
-@app.route('/')
+@app.route('/list')
 def users():
   conn = None
   cursor = None
