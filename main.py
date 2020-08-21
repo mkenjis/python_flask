@@ -37,14 +37,14 @@ def add_user():
       cursor.execute(sql, data)
       conn.commit()
       flash('User added successfully!')
-      return redirect('/')
+      return redirect('/list')
     else:
       return 'Error while adding user'
     cursor.close()
     conn.close()
   except Exception as e:
     print(e)
-    return redirect('/')
+    return redirect('/list')
 
 @app.route('/list')
 def users():
@@ -62,7 +62,7 @@ def users():
     conn.close()
   except Exception as e:
     print(e)
-    return redirect('/')
+    return redirect('/list')
 
 @app.route('/edit/<int:id>')
 def edit_view(id):
@@ -81,7 +81,7 @@ def edit_view(id):
     conn.close()
   except Exception as e:
     print(e)
-    return redirect('/')
+    return redirect('/list')
 
 @app.route('/update', methods=['POST'])
 def update_user():
@@ -107,12 +107,12 @@ def update_user():
       cursor.close()
       conn.close()
       flash('User updated successfully!')
-      return redirect('/')
+      return redirect('/list')
     else:
       return 'Error while updating user'
   except Exception as e:
     print(e)
-    return redirect('/')
+    return redirect('/list')
 
 @app.route('/delete/<int:id>')
 def delete_user(id):
@@ -126,10 +126,10 @@ def delete_user(id):
     flash('User deleted successfully!')
     cursor.close()
     conn.close()
-    return redirect('/')
+    return redirect('/list')
   except Exception as e:
     print(e)
-    return redirect('/')
+    return redirect('/list')
 
 if __name__ == "__main__":
   app.run(host='0.0.0.0')
