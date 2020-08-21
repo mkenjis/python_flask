@@ -1,0 +1,46 @@
+version: '3.1'
+
+# NOTE: in order to work on other swarm nodes, needs to push images to repository
+# docker image tag my_pyapp mkenjis/my_pyapp
+# docker login
+# docker push mkenjis/my_pyapp
+# docker image rm -f mkenjis/my_pyapp
+
+services:
+  pyapp:
+    image: mkenjis/my_pyapp
+    ports:
+      - '5000:5000'
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+    networks:
+      - net2
+    depends_on:
+      - db
+    healthcheck:
+      interval: 30s
+      retries: 3
+  db:
+    image: mysql:5.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    volumes:
+      - /root/data-dir:/var/lib/mysql
+    networks:
+      - net2
+  visualizer:
+    image: dockersamples/visualizer
+    ports:
+      - "8080:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  net2:
+    driver: overlay
